@@ -36,9 +36,10 @@ Spare capacity range for future use
 # Subnets
 
 Subnet format: 
+
 - db – app – pub
 
-NAME CIDR AZ
+Name and CIDR for availability zones
 
 - AZA
 
