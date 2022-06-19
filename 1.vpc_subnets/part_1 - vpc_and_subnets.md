@@ -7,14 +7,14 @@
 
 Create VPC $Name
 IP: 10.64.0.0/24
-# of subnets:   16
-# hosts/subnet: 11 (16-5)
+No. of subnets:   16
+No. hosts/subnet: 11 (16-5)
 
 AWS Reserved IPs = 5 
 Create VPC $Name
 IP: 10.64.0.0/24
-# of subnets: 16
-# hosts/subnet: 11 (16-5)
+No. of subnets: 16
+No. hosts/subnet: 11 (16-5)
 
 AWS Reserved IPs
 0.0: Network address.
