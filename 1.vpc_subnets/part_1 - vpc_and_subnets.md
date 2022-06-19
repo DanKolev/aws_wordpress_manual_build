@@ -73,26 +73,23 @@ Name and CIDR for availability zones
 IPv6 custom value
 
 - Every VPC can be allocated with  /56 IPv6 CIDR. Every subnet within that VPC can optionally be allocated with /64 IPv6 CIDR. There are 256 /64 ranges within /56 
-IPv6 CIDR.
-
-A hexadecimal value ranging from 00 to FF provides 256 /64possible values.
+IPv6 CIDR. A hexadecimal value ranging from 00 to FF provides 256 /64possible values.
 
 # Routing tables
 
+- Route tables format:
 
-Route tables
+  - lab-vpc1-rt-web
 
-lab-vpc1-rt-web
+  - lab-vpc1-rt-app
 
-lab-vpc1-rt-app
+  - lab-vpc1-rt-db
 
-lab-vpc1-rt-db
+Create RT and associate with web subnets.
 
-create RT and associate with web subnets
+Create routes for IPv4/6 to GW.
 
-create routes for IPv4/6 to GW
-
-enable auto-assign IPv4 for the web subnets
+Enable auto-assign IPv4 for the web subnets.
 
 
 
