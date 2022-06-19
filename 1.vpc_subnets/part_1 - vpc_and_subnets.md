@@ -15,19 +15,19 @@ Create VPC $Name
 
 
 
-## AWS Reserved IPs
+AWS Reserved IPs
 
-AWS Reserved IPs = 5
+- AWS Reserved IPs = 5
 
-0.0: Network address.
+ - 0.0: Network address.
 
-0.1: Reserved by AWS for the VPC router.
+ - 0.1: Reserved by AWS for the VPC router.
 
-0.2: Reserved by AWS. The IP address of the DNS server is the base of the VPC network range plus two.
+ - 0.2: Reserved by AWS. The IP address of the DNS server is the base of the VPC network range plus two.
 
-0.3: Reserved by AWS for future use.
+ - 0.3: Reserved by AWS for future use.
 
-0.255: Network broadcast address.
+ - 0.255: Network broadcast address.
 
 
 10.64.0.144 -  10.64.0.255 – spare capacity for future use
