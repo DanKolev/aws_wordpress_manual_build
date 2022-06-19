@@ -38,8 +38,6 @@ Spare capacity range for future use
 Subnet format: 
 - db – app – pub
 
-9 subnets total, 3 sets of the above format
-
 NAME CIDR AZ
 
 - AZA
