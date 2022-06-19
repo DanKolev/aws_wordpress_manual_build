@@ -33,57 +33,50 @@ AWS Reserved IPs
 Spare capacity range for future use
 - 10.64.0.144 - 10.64.0.255
 
-
-
 # Subnets
 
-
-Create subnets
-
-SN format: db – app – pub
+Subnet format: 
+- db – app – pub
 
 9 subnets total, 3 sets of the above format
 
+NAME CIDR AZ
 
-NAME CIDR AZ CustomIPv6Value
+- AZA
 
+  - sn-db-A 10.64.0.0/28 AZA IPv6 00 → IPv6 custom value
 
-AZA
+  - sn-app-A 10.64.0.16/28 AZA IPv6 01
 
-sn-db-A 10.64.0.0/28 AZA IPv6 00 → IPv6 custom value
-
-sn-app-A 10.64.0.16/28 AZA IPv6 01
-
-sn-web-A 10.64.0.32/28 AZA IPv6 02
+  - sn-web-A 10.64.0.32/28 AZA IPv6 02
 
 
-AZB
+- AZB
 
-sn-db-B 10.64.0.48/28 AZB IPv6 03
+  - sn-db-B 10.64.0.48/28 AZB IPv6 03
 
-sn-app-B 10.64.0.64/28 AZB IPv6 04
+  - sn-app-B 10.64.0.64/28 AZB IPv6 04
 
-sn-web-B 10.64.0.80/28 AZB IPv6 05
-
-
-AZC
-
-sn-db-C 10.64.0.96/28 AZC IPv6 06
-
-sn-app-C 10.64.0.112/28 AZC IPv6 07
-
-sn-web-C 10.64.0.128/28 AZC IPv6 08
+  - sn-web-B 10.64.0.80/28 AZB IPv6 05
 
 
-Remember to enable auto assign ipv6 on every subnet you create.
+- AZC
+
+  - sn-db-C 10.64.0.96/28 AZC IPv6 06
+
+  - sn-app-C 10.64.0.112/28 AZC IPv6 07
+
+  - sn-web-C 10.64.0.128/28 AZC IPv6 08
+
+
+- Remember to enable auto assign ipv6 on every subnet you create.
 
 IPv6 custom value
 
-Every VPC can be allocated with  /56 IPv6 CIDR. Every subnet within that VPC can optionally be allocated with /64 IPv6 CIDR. There are 256 /64 ranges within /56 IPv6 CIDR.
+- Every VPC can be allocated with  /56 IPv6 CIDR. Every subnet within that VPC can optionally be allocated with /64 IPv6 CIDR. There are 256 /64 ranges within /56 
+IPv6 CIDR.
 
 A hexadecimal value ranging from 00 to FF provides 256 /64possible values.
-
-
 
 # Routing tables
 
