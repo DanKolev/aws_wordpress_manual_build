@@ -30,7 +30,8 @@ AWS Reserved IPs
   - 0.255: Network broadcast address.
 
 
-10.64.0.144 -  10.64.0.255 – spare capacity for future use
+Spare capacity range for future use
+- 10.64.0.144 - 10.64.0.255
 
 
 
