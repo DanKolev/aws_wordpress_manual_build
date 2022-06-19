@@ -77,13 +77,13 @@ IPv6 CIDR. A hexadecimal value ranging from 00 to FF provides 256 /64possible va
 
 # Routing tables
 
-- Route tables format:
+Route tables format:
 
-  - lab-vpc1-rt-web
+- lab-vpc1-rt-web
 
-  - lab-vpc1-rt-app
+- lab-vpc1-rt-app
 
-  - lab-vpc1-rt-db
+- lab-vpc1-rt-db
 
 Create RT and associate with web subnets.
 
