@@ -1,3 +1,4 @@
 # Create VPC and Subnets
 
-![subnets](~/repos/aws_wordpress_manual_build/1.vpc_subnets/vpc_with_subnets.pdf)
+
+
