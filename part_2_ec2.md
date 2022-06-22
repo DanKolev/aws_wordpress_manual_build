@@ -4,13 +4,21 @@
 
 # Overview
 
- - Setup the environment which WordPress will run from.
+ - Create a security group for the EC2 instance.
 
- - CREATE SECURITY GROUP FOR EC2 MUST BE PUT IN THE NOTES
+ - Setup the environment which WordPress will run from.
 
  - Configure SSM Parameters which the manual and automatic stages will use and perform a manual install of wordpress and a database on the same EC2 instance.
 
- # Create Instance to run Wordpress
+# Create security group for the EC2 instance
+
+!!
+
+!!
+
+!!
+
+# Create Instance to run Wordpress
 
 Click Launch Instance
 
