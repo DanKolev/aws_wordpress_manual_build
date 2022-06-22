@@ -14,7 +14,7 @@
 
 !!
 
-!!
+!!     Work on This       and fix the sn-Web-A, the image shows 'B'
 
 !!
 
@@ -53,6 +53,214 @@ Find the `Credit Specification Dropdown` and choose `Standard` (some accounts ar
 Click `View All instances`
 
 Wait for the instance to be in a RUNNING state
+
+# Create SSM Parameter Store values for wordpress
+
+SSM Parameter Store will be used to store configuration information. 
+
+Create Parameter - DBUser (the login for the specific wordpress DB)
+
+ - Click `Create Parameter` Set Name to `/Lab/Wordpress/DBUser` Set Description to `Wordpress Database User`
+
+ - Set Tier to `Standard`
+
+ - Set Type to `String`
+
+ - Set Data type to `text`
+
+ - Set Value to `labwordpressuser`
+
+ - Click `Create parameter`
+
+Create Parameter - DBName (the name of the wordpress database)
+
+Click `Create Parameter` Set Name to `/Lab/Wordpress/DBName` Set Description to `Wordpress Database Name`
+
+ - Set Tier to `Standard`
+
+ - Set Type to `String`
+
+ - Set Data type to `text`
+
+ - Set Value to `labwordpressdb`
+
+ - Click `Create parameter`
+
+Create Parameter - DBEndpoint (the endpoint for the wordpress DB .. )
+
+ - Click `Create Parameter` Set Name to `/Lab/Wordpress/DBEndpoint` Set Description to `Wordpress Endpoint Name`
+
+ - Set Tier to `Standard`
+
+ - Set Type to `String`
+
+ - Set Data type to `text`
+
+ - Set Value to `localhost`
+
+ - Click `Create parameter`
+
+Create Parameter - DBPassword (the password for the DBUser)
+
+ - Click `Create Parameter` Set Name to `/Lab/Wordpress/DBPassword` Set Description to `Wordpress DB Password`
+
+ - Set Tier to `Standard`
+
+ - Set Type to `SecureString`
+
+ - Set `KMS Key Source` to `My Current Account`
+
+ - Leave KMS Key ID as default Set Value to `<password>` Click `Create parameter`
+
+Create Parameter - DBRootPassword (the password for the database root user, used for self-managed admin)
+
+ - Click `Create Parameter` Set Name to /Lab/Wordpress/DBRootPassword Set Description to `Wordpress DBRoot Password`
+
+ - Set Tier to `Standard`
+
+ - Set Type to `SecureString`
+
+ - Set `KMS Key Source` to `My Current Account`
+
+ - Leave KMS Key ID as default Set Value to `<password>` Click `Create parameter`
+
+# Connect to the instance and install a database and wordpress
+
+
+!!
+
+!!   Edit  the rest!!
+
+!!
+
+Right click on Wordpress-Manual choose Connect Choose Session Manager
+Click Connect
+type sudo bash and press enter
+type cd and press enter
+type clear and press enter
+Bring in the parameter values from SSM
+
+Run the commands below to bring the parameter store values into ENV variables to make the manual build easier.
+
+DBPassword=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBPassword --with-decryption --query Parameters[0].Value)
+DBPassword=`echo $DBPassword | sed -e 's/^"//' -e 's/"$//'`
+
+DBRootPassword=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBRootPassword --with-decryption --query Parameters[0].Value)
+DBRootPassword=`echo $DBRootPassword | sed -e 's/^"//' -e 's/"$//'`
+
+DBUser=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBUser --query Parameters[0].Value)
+DBUser=`echo $DBUser | sed -e 's/^"//' -e 's/"$//'`
+
+DBName=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBName --query Parameters[0].Value)
+DBName=`echo $DBName | sed -e 's/^"//' -e 's/"$//'`
+
+DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBEndpoint --query Parameters[0].Value)
+DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
+
+Install updates
+
+sudo yum -y update
+sudo yum -y upgrade
+
+Install Pre-Reqs and Web Server
+
+sudo yum install -y mariadb-server httpd wget
+sudo amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
+sudo amazon-linux-extras install epel -y
+sudo yum install stress -y
+
+Set DB and HTTP Server to running and start by default
+
+sudo systemctl enable httpd
+sudo systemctl enable mariadb
+sudo systemctl start httpd
+sudo systemctl start mariadb
+
+Set the MariaDB Root Password
+
+sudo mysqladmin -u root password $DBRootPassword
+
+Download and extract Wordpress
+
+sudo wget http://wordpress.org/latest.tar.gz -P /var/www/html
+cd /var/www/html
+sudo tar -zxvf latest.tar.gz
+sudo cp -rvf wordpress/* .
+sudo rm -R wordpress
+sudo rm latest.tar.gz
+
+Configure the wordpress wp-config.php file
+
+sudo cp ./wp-config-sample.php ./wp-config.php
+sudo sed -i "s/'database_name_here'/'$DBName'/g" wp-config.php
+sudo sed -i "s/'username_here'/'$DBUser'/g" wp-config.php
+sudo sed -i "s/'password_here'/'$DBPassword'/g" wp-config.php
+
+Fix Permissions on the filesystem
+
+sudo usermod -a -G apache ec2-user   
+sudo chown -R ec2-user:apache /var/www
+sudo chmod 2775 /var/www
+sudo find /var/www -type d -exec chmod 2775 {} \;
+sudo find /var/www -type f -exec chmod 0664 {} \;
+
+Create Wordpress User, set its password, create the database and configure permissions
+
+sudo echo "CREATE DATABASE $DBName;" >> /tmp/db.setup
+sudo echo "CREATE USER '$DBUser'@'localhost' IDENTIFIED BY '$DBPassword';" >> /tmp/db.setup
+sudo echo "GRANT ALL ON $DBName.* TO '$DBUser'@'localhost';" >> /tmp/db.setup
+sudo echo "FLUSH PRIVILEGES;" >> /tmp/db.setup
+sudo mysql -u root --password=$DBRootPassword < /tmp/db.setup
+sudo rm /tmp/db.setup
+
+Test Wordpress is installed
+
+Open the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name
+Select the Wordpress-Manual instance
+copy the IPv4 Public IP into your clipboard (DON'T CLICK THE OPEN LINK ... just copy the IP) Open that IP in a new tab
+You should see the wordpress welcome page
+Perform Initial Configuration and make a post
+
+in Site Title enter Catagram
+in Username enter admin in Password it should suggest a strong password for the wordpress admin user, feel free to use this or choose your own - regardless, write it down somewhere safe.
+in Your Email enter your email address
+Click Install WordPress Click Log In
+In Username or Email Address enter admin
+in Password enter the previously noted down strong password
+Click Log In
+
+Click Posts in the menu on the left
+Select Hello World! Click Bulk Actions and select Move to Trash Click Apply
+
+Click Add New
+If you see any popups close them down
+For title The Best Animal(s)!
+Click the + under the title, select Gallery Click Upload
+Select some animal pictures.... if you dont have any use google images to download some
+Upload them
+Click Publish
+Click Publish Click view Post
+
+This is your working, manually installed and configured wordpress
+STAGE 1 - FINISH
+
+This configuration has several limitations which you will resolve one by one within this lesson :-
+
+    The application and database are built manually, taking time and not allowing automation
+    ^^ it was slow and annoying ... that was the intention.
+    The database and application are on the same instance, neither can scale without the other
+    The database of the application is on an instance, scaling IN/OUT risks this media
+    The application media and UI store is local to an instance, scaling IN/OUT risks this media
+    Customer Connections are to an instance directly ... no health checks/auto healing
+    The IP of the instance is hardcoded into the database ....
+    Go to https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name
+    Right click Wordpress-Manual , Instance State, Stop, Yes, Stop
+    Right click Wordpress-Manual , Instance State, Start, Yes, Start
+    the IP address has changed ... which is bad
+    Try browsing to it ...
+    What about the images....?
+    The images are pointing at the old IP address...
+    Right click Wordpress-Manual , Instance State, Terminate, Yes, Terminate
 
 
 
