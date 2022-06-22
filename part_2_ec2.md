@@ -6,17 +6,19 @@
 
  - Setup the environment which WordPress will run from.
 
+ - CREATE SECURITY GROUP FOR EC2 MUST BE PUT IN THE NOTES
+
  - Configure SSM Parameters which the manual and automatic stages will use and perform a manual install of wordpress and a database on the same EC2 instance.
 
  # Create Instance to run Wordpress
 
- - Click Launch Instance
+Click Launch Instance
 
- - For name use `Wordpress-Manual`
+For name use `Wordpress-Manual`
 
- - Select `Amazon Linux`
+Select `Amazon Linux`
 
- - From the dropdown make sure `Amazon Linux 2 AMI (HVM), SSD Volume Type' AMI is selected ensure `64-bit (x86)` is selected in the architecture dropdown.
+From the dropdown make sure `Amazon Linux 2 AMI (HVM), SSD Volume Type' AMI is selected ensure `64-bit (x86)` is selected in the architecture dropdown.
 
 Under instance `type` we will use t3.micro, as it is free.
 
