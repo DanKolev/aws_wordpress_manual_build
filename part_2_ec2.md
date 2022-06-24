@@ -126,22 +126,17 @@ Create Parameter - DBRootPassword (the password for the database root user, used
 
 # Connect to the instance and install a database and wordpress
 
+ - Right click on `Wordpress-Manual` choose `Connect` choose `Session Manager`
+ - Click `Connect`
+ - Type `sudo bash` and press Enter
+ - Type `cd` and press Enter
+ - Type `clear` and press Enter
 
-!!
-
-!!   Edit  the rest!!
-
-!!
-
-Right click on Wordpress-Manual choose Connect Choose Session Manager
-Click Connect
-type sudo bash and press enter
-type cd and press enter
-type clear and press enter
 Bring in the parameter values from SSM
 
-Run the commands below to bring the parameter store values into ENV variables to make the manual build easier.
+Run the following commands to bring the parameter store values into ENV variables to make the manual build easier.
 
+```html
 DBPassword=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBPassword --with-decryption --query Parameters[0].Value)
 DBPassword=`echo $DBPassword | sed -e 's/^"//' -e 's/"$//'`
 
@@ -156,9 +151,11 @@ DBName=`echo $DBName | sed -e 's/^"//' -e 's/"$//'`
 
 DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBEndpoint --query Parameters[0].Value)
 DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
+```
 
 Install updates
 
+```html
 sudo yum -y update
 sudo yum -y upgrade
 
@@ -168,81 +165,110 @@ sudo yum install -y mariadb-server httpd wget
 sudo amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
 sudo amazon-linux-extras install epel -y
 sudo yum install stress -y
+```
 
 Set DB and HTTP Server to running and start by default
 
+```html
 sudo systemctl enable httpd
 sudo systemctl enable mariadb
 sudo systemctl start httpd
 sudo systemctl start mariadb
+```
 
 Set the MariaDB Root Password
 
+```html
 sudo mysqladmin -u root password $DBRootPassword
+```
 
 Download and extract Wordpress
 
+```html
 sudo wget http://wordpress.org/latest.tar.gz -P /var/www/html
 cd /var/www/html
 sudo tar -zxvf latest.tar.gz
 sudo cp -rvf wordpress/* .
 sudo rm -R wordpress
 sudo rm latest.tar.gz
+```
 
 Configure the wordpress wp-config.php file
 
+```html
 sudo cp ./wp-config-sample.php ./wp-config.php
 sudo sed -i "s/'database_name_here'/'$DBName'/g" wp-config.php
 sudo sed -i "s/'username_here'/'$DBUser'/g" wp-config.php
 sudo sed -i "s/'password_here'/'$DBPassword'/g" wp-config.php
+```
 
 Fix Permissions on the filesystem
 
+```html
 sudo usermod -a -G apache ec2-user   
 sudo chown -R ec2-user:apache /var/www
 sudo chmod 2775 /var/www
 sudo find /var/www -type d -exec chmod 2775 {} \;
 sudo find /var/www -type f -exec chmod 0664 {} \;
+```
 
 Create Wordpress User, set its password, create the database and configure permissions
 
+```html
 sudo echo "CREATE DATABASE $DBName;" >> /tmp/db.setup
 sudo echo "CREATE USER '$DBUser'@'localhost' IDENTIFIED BY '$DBPassword';" >> /tmp/db.setup
 sudo echo "GRANT ALL ON $DBName.* TO '$DBUser'@'localhost';" >> /tmp/db.setup
 sudo echo "FLUSH PRIVILEGES;" >> /tmp/db.setup
 sudo mysql -u root --password=$DBRootPassword < /tmp/db.setup
 sudo rm /tmp/db.setup
+```
 
 Test Wordpress is installed
 
-Open the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name
-Select the Wordpress-Manual instance
-copy the IPv4 Public IP into your clipboard (DON'T CLICK THE OPEN LINK ... just copy the IP) Open that IP in a new tab
-You should see the wordpress welcome page
+ - Open the EC2 console
+
+ - Select the `Wordpress-Manual` instance
+
+ - Copy the IPv4 Public IP into your clipboard (DON'T CLICK THE OPEN LINK ... just copy the IP) Open that IP in a new tab
+
+ - You should see the wordpress welcome page
+
 Perform Initial Configuration and make a post
 
-in Site Title enter Catagram
-in Username enter admin in Password it should suggest a strong password for the wordpress admin user, feel free to use this or choose your own - regardless, write it down somewhere safe.
-in Your Email enter your email address
-Click Install WordPress Click Log In
-In Username or Email Address enter admin
-in Password enter the previously noted down strong password
-Click Log In
+ - In `Site Title` enter `Planetarium`
 
-Click Posts in the menu on the left
-Select Hello World! Click Bulk Actions and select Move to Trash Click Apply
+ - In `Username` enter `admin` in `Password` it should suggest a strong password for the wordpress admin user, feel free to use this or choose your own. Write it down somewhere safe.
 
-Click Add New
-If you see any popups close them down
-For title The Best Animal(s)!
-Click the + under the title, select Gallery Click Upload
-Select some animal pictures.... if you dont have any use google images to download some
-Upload them
-Click Publish
-Click Publish Click view Post
+ - In `Your Email` enter your email address
 
-This is your working, manually installed and configured wordpress
-STAGE 1 - FINISH
+ - Click `Install WordPress` click `Log In`
+
+ - In `Username or Email Address` enter `admin`
+
+ - In `Password` enter the previously noted down strong password click `Log In`
+
+
+ - Click `Posts` in the menu on the left
+ 
+ - Select `Hello World!` click `Bulk Actions` and select `Move to Trash` click `Apply`
+
+ - Click `Add New`
+
+ - If you see any popups close them down
+
+ - For title `Space is Incredible!`
+
+ - Click the `+` under the title, select `Gallery` click `Upload`
+
+ - Select some pictures of planets.
+
+ - Upload them
+
+ - Click `Publish`
+
+ - Click `View Post`
+
+This is your working, manually installed and configured wordpress.
 
 This configuration has several limitations which you will resolve one by one within this lesson :-
 
@@ -253,7 +279,7 @@ This configuration has several limitations which you will resolve one by one wit
     The application media and UI store is local to an instance, scaling IN/OUT risks this media
     Customer Connections are to an instance directly ... no health checks/auto healing
     The IP of the instance is hardcoded into the database ....
-    Go to https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name
+    
     Right click Wordpress-Manual , Instance State, Stop, Yes, Stop
     Right click Wordpress-Manual , Instance State, Start, Yes, Start
     the IP address has changed ... which is bad
