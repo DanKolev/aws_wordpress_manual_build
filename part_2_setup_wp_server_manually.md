@@ -270,7 +270,7 @@ Perform Initial Configuration and make a post
 
 This is your working, manually installed and configured wordpress.
 
-This configuration has several limitations which you will resolve one by one within this lesson :-
+This configuration has several limitations which you will be resolved one by one :-
 
     The application and database are built manually, taking time and not allowing automation
     ^^ it was slow and annoying ... that was the intention.
