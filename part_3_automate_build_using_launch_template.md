@@ -1,6 +1,6 @@
 # Advanced Demo - Web App - Single Server to Elastic Evolution
 
-![Stage2 - PNG]
+![Stage2 - PNG]()
 
 In stage 2 of this advanced demo lesson you are going to create a launch template which can automate the build of WordPress.  
 The architecture will still use the single instance for both the WordPress application and database, the only change will be an automatic build rather than manual.  
@@ -12,7 +12,7 @@ Right click on the manual instance you created in the previous step called `Word
 
 # STAGE 2A - Create the Launch Template
 
-Open the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name  
+Open the EC2 console   
 Click `Launch Templates` under `Instances` on the left menu  
 Click `Create Launch Template`  
 Under `Launch Template Name` enter `Wordpress`  
