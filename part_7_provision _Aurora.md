@@ -1,6 +1,6 @@
 # Advanced Demo - Web App - Single Server to Elastic Evolution
 
-![Stage6 - PNG]()
+![Provision_Aurora](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/diagrams/7.provision_Aurora.png)
 
 In stage 6 of this advanced demo lesson, you can optionally move to a 3AZ aurora cluster to provide high levels of resilience for the wordpress application. This is entirely optional and will **NOT** be covered under the free tier.
 

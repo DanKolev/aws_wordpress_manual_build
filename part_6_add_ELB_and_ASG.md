@@ -1,6 +1,6 @@
 # Advanced Demo - Web App - Single Server to Elastic Evolution
 
-![Stage5 - PNG]()
+![Add_ELB_ASG](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/diagrams/6.add_ELB_and_ASG.png)
 
 In stage 5 of this advanced demo lesson, you will be adding an auto scaling group to provision and terminate instances automatically based on load on the system.  
 

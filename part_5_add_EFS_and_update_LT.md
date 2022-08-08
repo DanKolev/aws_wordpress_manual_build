@@ -1,6 +1,6 @@
 # Advanced Demo - Web App - Single Server to Elastic Evolution
 
-![Stage4 - PNG]()
+![Add_EFS](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/diagrams/5.add_efs_and_update_LT.png)
 
 Welcome back, in stage 4 of this demo series you will be creating an EFS file system designed to store the wordpress locally stored media. This area stores any media for posts uploaded when creating the post as well as theme data.  By storing this on a shared file system it means that the data can be used across all instances in a consistent way, and it lives on past the lifetime of the instance.  
 
