@@ -5,13 +5,13 @@
 
 # VPC 
 
-Create VPC $Name
+VPC: PlanetsVPC
 
-- IP: 10.64.0.0/24
+- IP: 10.64.0.0/16
 
 - No. of subnets:   16
 
-- No. hosts/subnet: 11 (16-5)
+- No. hosts/subnet: 11 
 
 
 
@@ -79,20 +79,23 @@ IPv6 CIDR. A hexadecimal value ranging from 00 to FF provides 256 /64possible va
 
 Route tables format:
 
-- lab-vpc1-rt-web
+ - PLNTS-VPC-RT-PUB`
 
-- lab-vpc1-rt-app
+# Steps 
 
-- lab-vpc1-rt-db
+1. Create PlanetsVPC  
+Create Internet gateway `PlanetsIGW`, and attach to `PlanetsVPC`.
+Once the VPC has been created, click on ‘Actions’, then:
+Edit `Edit DNS resolutions` and ensure that is enabled
+Edit `DNS hostnames` and check on ‘Enable’
 
-Create RT and associate with web subnets.
+2. Create subnets and assign both IPv4 and IPv6.
+From `Actions`, select `Edit subnet settings`, then `Enable auto-assign IPv6` on each subnet.
+Configure route table for public and private subnets.
+Create an S3 bucket for flow logs.
 
-Create routes for IPv4/6 to GW.
-
-Enable auto-assign IPv4 for the web subnets.
-
-
-
-
+3. Routing tables and assignment
+Create a routing table `PLNTS-VPC-RT-PUB`
+Assiciate the Public RT with WEB (public) subnets from the `Subnet Associacions` tab. Add routes to IGW for IPv4 and IPv6 by using the `Route` tab.
 
 
