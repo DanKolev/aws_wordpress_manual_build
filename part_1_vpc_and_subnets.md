@@ -85,10 +85,10 @@ Route tables format:
 
 1. Create PlanetsVPC 
 
-Create Internet gateway `PlanetsIGW`, and attach to `PlanetsVPC`.
-Once the VPC has been created, click on ‘Actions’, then:
-Edit `Edit DNS resolutions` and ensure that is enabled
-Edit `DNS hostnames` and check on ‘Enable’
+   Create Internet gateway `PlanetsIGW`, and attach to `PlanetsVPC`.
+   Once the VPC has been created, click on ‘Actions’, then:
+   Edit `Edit DNS resolutions` and ensure that is enabled
+   Edit `DNS hostnames` and check on ‘Enable’
 
 2. Create subnets and assign both, IPv4 and IPv6.
 
