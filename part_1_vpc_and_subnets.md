@@ -98,13 +98,11 @@ Route tables format:
 
    From `Actions`, select `Edit subnet settings`, then `Enable auto-assign IPv6` on each subnet.
 
-   Configure route table for public and private subnets.
-
    
 3. Routing tables and assignment
 
    Create a routing table `PLNTS-VPC-RT-PUB`
-   
+
    Assiciate the Public RT with WEB (public) subnets from the `Subnet Associacions` tab. Add routes to IGW for IPv4 and IPv6 by using the `Route` tab.
 
 
