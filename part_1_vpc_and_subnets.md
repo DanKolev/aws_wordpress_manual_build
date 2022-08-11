@@ -86,18 +86,25 @@ Route tables format:
 1. Create 'PlanetsVPC'
 
    Create Internet gateway `PlanetsIGW`, and attach to `PlanetsVPC`.
+
    Once the VPC has been created, click on ‘Actions’, then:
-   Edit `Edit DNS resolutions` and ensure that is enabled
-   Edit `DNS hostnames` and check on ‘Enable’
+
+   - Edit `Edit DNS resolutions` and ensure that is enabled
+
+   - Edit `DNS hostnames` and check on ‘Enable’
+
 
 2. Create subnets and assign both, IPv4 and IPv6.
 
    From `Actions`, select `Edit subnet settings`, then `Enable auto-assign IPv6` on each subnet.
+
    Configure route table for public and private subnets.
+
    
 3. Routing tables and assignment
 
    Create a routing table `PLNTS-VPC-RT-PUB`
+   
    Assiciate the Public RT with WEB (public) subnets from the `Subnet Associacions` tab. Add routes to IGW for IPv4 and IPv6 by using the `Route` tab.
 
 
