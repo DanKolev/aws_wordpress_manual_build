@@ -5,7 +5,7 @@
 
 # VPC 
 
-VPC: PlanetsVPC
+Created VPC named: PlanetsVPC
 
 - IP: 10.64.0.0/16
 
@@ -81,9 +81,9 @@ Route tables format:
 
  - PLNTS-VPC-RT-PUB`
 
-# Steps 
+# Additional Steps 
 
-1. Create PlanetsVPC 
+1. Create 'PlanetsVPC'
 
    Create Internet gateway `PlanetsIGW`, and attach to `PlanetsVPC`.
    Once the VPC has been created, click on ‘Actions’, then:
