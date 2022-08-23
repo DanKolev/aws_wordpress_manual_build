@@ -8,19 +8,38 @@
 
  - Setup the environment which WordPress will run from.
 
+ - Configure `Session Manager` as means to access the server.
+
  - Configure SSM Parameters which the manual and automatic stages will use and perform a manual install of wordpress and a database on the same EC2 instance.
 
 # Create security group for the EC2 instance
+Click `Create Security Group`
 
-!!
+For name use `VPCSPCSG`
 
-!!     Work on This       and fix the sn-Web-A, the image shows 'B'
+For `Description` type `Allow HTTPS IN`
 
-!!
+Under `Inbound Rules` click `Add rule`
+
+Under `Type` enter and select HTTPS, and a CIDR block of 0.0.0.0/0
+
+Click on `Create Security Group`
+
+# Configure Session Manager login
+
+Under `IAM` select `Role`, then click on `Create Role`
+
+For `Trusted entity type` ensure that `AWS service` is selected.
+
+Under `Common use cases` select `EC2`
+
+Under `Add permissions` paste the policy name `AmazonSSMManagedInstanceCore`, and click `Next`.
+
+Under `Name, Review and Create`, scroll all the way don and click on `Create Role`.
 
 # Create Instance to run Wordpress
 
-Click Launch Instance
+Click `Launch Instance`
 
 For name use `Wordpress-Manual`
 
@@ -40,13 +59,13 @@ Make sure for both `Auto-assign public IP` and `Auto-assign IPv6 IP` you set to 
 
 Under security Group Check `Select an existing security group`
 
-Select `LabVPC-SGWordpress` it will have randomness after it, thats ok :)
+Select `SPCVPC-SGWordpress` it will have randomness after it, thats ok :)
 
 We will leave storage as default so make no changes here
 
 Expand `Advanced Details`
 
-For IAM `instance profile role` select `LabVPC-WordpressInstanceProfile`
+For IAM `instance profile role` select `SPCVPC-WordpressInstanceProfile`
 
 Find the `Credit Specification Dropdown` and choose `Standard` (some accounts aren't enabled for Unlimited) Click `Launch Instance`
 
@@ -60,7 +79,7 @@ SSM Parameter Store will be used to store configuration information.
 
 Create Parameter - DBUser (the login for the specific wordpress DB)
 
- - Click `Create Parameter` Set Name to `/Lab/Wordpress/DBUser` Set Description to `Wordpress Database User`
+ - Click `Create Parameter` Set Name to `/SPC/Wordpress/DBUser` Set Description to `Wordpress Database User`
 
  - Set Tier to `Standard`
 
@@ -68,13 +87,13 @@ Create Parameter - DBUser (the login for the specific wordpress DB)
 
  - Set Data type to `text`
 
- - Set Value to `labwordpressuser`
+ - Set Value to `spcwordpressuser`
 
  - Click `Create parameter`
 
 Create Parameter - DBName (the name of the wordpress database)
 
-Click `Create Parameter` Set Name to `/Lab/Wordpress/DBName` Set Description to `Wordpress Database Name`
+Click `Create Parameter` Set Name to `/SPC/Wordpress/DBName` Set Description to `Wordpress Database Name`
 
  - Set Tier to `Standard`
 
@@ -82,13 +101,13 @@ Click `Create Parameter` Set Name to `/Lab/Wordpress/DBName` Set Description to 
 
  - Set Data type to `text`
 
- - Set Value to `labwordpressdb`
+ - Set Value to `spcwordpressdb`
 
  - Click `Create parameter`
 
 Create Parameter - DBEndpoint (the endpoint for the wordpress DB .. )
 
- - Click `Create Parameter` Set Name to `/Lab/Wordpress/DBEndpoint` Set Description to `Wordpress Endpoint Name`
+ - Click `Create Parameter` Set Name to `/SPC/Wordpress/DBEndpoint` Set Description to `Wordpress Endpoint Name`
 
  - Set Tier to `Standard`
 
@@ -102,7 +121,7 @@ Create Parameter - DBEndpoint (the endpoint for the wordpress DB .. )
 
 Create Parameter - DBPassword (the password for the DBUser)
 
- - Click `Create Parameter` Set Name to `/Lab/Wordpress/DBPassword` Set Description to `Wordpress DB Password`
+ - Click `Create Parameter` Set Name to `/SPC/Wordpress/DBPassword` Set Description to `Wordpress DB Password`
 
  - Set Tier to `Standard`
 
@@ -114,7 +133,7 @@ Create Parameter - DBPassword (the password for the DBUser)
 
 Create Parameter - DBRootPassword (the password for the database root user, used for self-managed admin)
 
- - Click `Create Parameter` Set Name to /Lab/Wordpress/DBRootPassword Set Description to `Wordpress DBRoot Password`
+ - Click `Create Parameter` Set Name to /SPC/Wordpress/DBRootPassword Set Description to `Wordpress DBRoot Password`
 
  - Set Tier to `Standard`
 
@@ -137,19 +156,19 @@ Bring in the parameter values from SSM
 Run the following commands to bring the parameter store values into ENV variables to make the manual build easier.
 
 ```html
-DBPassword=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBPassword --with-decryption --query Parameters[0].Value)
+DBPassword=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/DBPassword --with-decryption --query Parameters[0].Value)
 DBPassword=`echo $DBPassword | sed -e 's/^"//' -e 's/"$//'`
 
-DBRootPassword=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBRootPassword --with-decryption --query Parameters[0].Value)
+DBRootPassword=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/DBRootPassword --with-decryption --query Parameters[0].Value)
 DBRootPassword=`echo $DBRootPassword | sed -e 's/^"//' -e 's/"$//'`
 
-DBUser=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBUser --query Parameters[0].Value)
+DBUser=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/DBUser --query Parameters[0].Value)
 DBUser=`echo $DBUser | sed -e 's/^"//' -e 's/"$//'`
 
-DBName=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBName --query Parameters[0].Value)
+DBName=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/DBName --query Parameters[0].Value)
 DBName=`echo $DBName | sed -e 's/^"//' -e 's/"$//'`
 
-DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /Lab/Wordpress/DBEndpoint --query Parameters[0].Value)
+DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/DBEndpoint --query Parameters[0].Value)
 DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
 ```
 

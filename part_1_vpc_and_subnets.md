@@ -103,6 +103,6 @@ Route tables format:
 
    Create a routing table `PLNTS-VPC-RT-PUB`
 
-   Assiciate the Public RT with WEB (public) subnets from the `Subnet Associacions` tab. Add routes to IGW for IPv4 and IPv6 by using the `Route` tab.
+   Assiciate the public rout table with WEB (public) subnets from the `Subnet Associacions` tab. Add routes to IGW for IPv4 and IPv6 by using the `Route` tab.
 
 
