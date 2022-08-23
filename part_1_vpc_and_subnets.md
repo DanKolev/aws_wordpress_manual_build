@@ -43,7 +43,7 @@ Name and CIDR for availability zones
 
 - AZA
 
-  - sn-db-A 10.64.0.0/28 AZA IPv6 00 → IPv6 custom value
+  - sn-db-A  10.64.0.0/28 AZA IPv6 00 → IPv6 custom value
 
   - sn-app-A 10.64.0.16/28 AZA IPv6 01
 
@@ -52,7 +52,7 @@ Name and CIDR for availability zones
 
 - AZB
 
-  - sn-db-B 10.64.0.48/28 AZB IPv6 03
+  - sn-db-B  10.64.0.48/28 AZB IPv6 03
 
   - sn-app-B 10.64.0.64/28 AZB IPv6 04
 
@@ -61,7 +61,7 @@ Name and CIDR for availability zones
 
 - AZC
 
-  - sn-db-C 10.64.0.96/28 AZC IPv6 06
+  - sn-db-C  10.64.0.96/28 AZC IPv6 06
 
   - sn-app-C 10.64.0.112/28 AZC IPv6 07
 
