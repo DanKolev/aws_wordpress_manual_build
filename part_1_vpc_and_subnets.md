@@ -1,6 +1,6 @@
 # Create VPC and Subnets
 
-![Subnets](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/diagrams/1.vpc_with-subnetting.png)
+![Subnets](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/data/diagrams/1.vpc_with-subnetting.png)
 
 
 # VPC 

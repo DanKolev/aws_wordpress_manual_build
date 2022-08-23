@@ -1,6 +1,6 @@
 # Create a single server for web app
 
-![Server](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/diagrams/2.setup_wordpress_server_manually.png)
+![Server](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/data/diagrams/2.setup_wordpress_server_manually.png)
 
 # Overview
 

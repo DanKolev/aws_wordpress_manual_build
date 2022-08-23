@@ -1,6 +1,6 @@
 # Advanced Demo - Web App - Single Server to Elastic Evolution
 
-![Automate_LT](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/diagrams/3.automate_built_using_launch_template.png)
+![Automate_LT](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/data/diagrams/3.automate_built_using_launch_template.png)
 
 In stage 2 of this advanced demo lesson you are going to create a launch template which can automate the build of WordPress.  
 The architecture will still use the single instance for both the WordPress application and database, the only change will be an automatic build rather than manual.  

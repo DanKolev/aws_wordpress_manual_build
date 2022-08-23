@@ -1,6 +1,6 @@
 # Advanced Demo - Web App - Single Server to Elastic Evolution
 
-![Add_RDS](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/diagrams/4.add_rds_and_update_launch_template.png)
+![Add_RDS](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/data/diagrams/4.add_rds_and_update_launch_template.png)
 
 In stage 3 you will be splitting out the database functionality from the EC2 instance .. running MariaDB to an RDS instance running the MySQL Engine.  
 This will allow the DB and Instance to scale independently, and will allow the data to be secure past the lifetime of the EC2 instance.  
