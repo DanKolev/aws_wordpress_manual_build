@@ -11,7 +11,7 @@ Welcome back, in stage 4 of this demo series you will be creating an EFS file sy
 Move to the EFS Console  
 Click on `Create file System`  
 We're going to step through the full configuration options, so click on `Customize`  
-For `Name` type `A4L-WORDPRESS-CONTENT`  
+For `Name` type `SPC-WORDPRESS-CONTENT`  
 This is critical data so for `Availability and Durability` leave this set to `Regional` and ensure `Enable Automatic Backups` is enabled.  
 for `LifeCycle management` leave as the default of `30 days since last access`  
 You have two `performance modes` to pick, choose `General Purpose` as MAX I/O is for very spefific high performance scenarios.  
@@ -23,12 +23,12 @@ Click `Next`
 
 In this part you will be configuing the EFS `Mount Targets` which are the network interfaces in the VPC which your instances will connect with.  
 
-In the `Virtual Private Cloud (VPC)` dropdown select `A4LVPC`  
+In the `Virtual Private Cloud (VPC)` dropdown select `SPCVPC`  
 You should see 3 rows.  
 Make sure `us-east-1a`, `us-east-1b` & `us-east-1c` are selected in each row.  
-In `us-east-1a` row, select `sn-App-A` in the subnet ID dropdown, and in the security groups dropdown select `A4LVPC-SGEFS` & remove the default security group  
-In `us-east-1b` row, select `sn-App-B` in the subnet ID dropdown, and in the security groups dropdown select `A4LVPC-SGEFS` & remove the default security group  
-In `us-east-1c` row, select `sn-App-C` in the subnet ID dropdown, and in the security groups dropdown select `A4LVPC-SGEFS` & remove the default security group  
+In `us-east-1a` row, select `sn-App-A` in the subnet ID dropdown, and in the security groups dropdown select `SPCVPC-SGEFS` & remove the default security group  
+In `us-east-1b` row, select `sn-App-B` in the subnet ID dropdown, and in the security groups dropdown select `SPCVPC-SGEFS` & remove the default security group  
+In `us-east-1c` row, select `sn-App-C` in the subnet ID dropdown, and in the security groups dropdown select `SPCVPC-SGEFS` & remove the default security group  
 
 Click `next`  
 Leave all these options as default and click `next`  
@@ -48,7 +48,7 @@ Now that the file system has been created, you need to add another parameter sto
 Move to the Systems Manager console https://console.aws.amazon.com/systems-manager/home?region=us-east-1#  
 Click on `Parameter Store` on the left menu  
 Click `Create Parameter`  
-Under `Name` enter `/A4L/Wordpress/EFSFSID` 
+Under `Name` enter `/SPC/Wordpress/EFSFSID` 
 Under `Description` enter `File System ID for Wordpress Content (wp-content)`  
 for `Tier` set `Standard`  
 For `Type` set `String`  
@@ -84,7 +84,7 @@ sudo mkdir wp-content
 then get the efs file system ID from parameter store
 
 ```
-EFSFSID=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/EFSFSID --query Parameters[0].Value)
+EFSFSID=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/EFSFSID --query Parameters[0].Value)
 EFSFSID=`echo $EFSFSID | sed -e 's/^"//' -e 's/"$//'`
 ```
 
@@ -119,7 +119,7 @@ Next you will update the launch template so that it automatically mounts the EFS
 Go to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:  
 Click `Launch Templates`  
 Check the box next to the `Wordpress` launch template, click `Actions` and click `Modify Template (Create New Version)`  
-for `Template version description` enter `App only, uses EFS filesystem defined in /A4L/Wordpress/EFSFSID`  
+for `Template version description` enter `App only, uses EFS filesystem defined in /SPC/Wordpress/EFSFSID`  
 Scroll to the bottom and expand `Advanced Details`  
 Scroll to the bottom and find `User Data` expand the entry box as much as possible.  
 
@@ -127,7 +127,7 @@ After `#!/bin/bash -xe` position cursor at the end & press enter twice to add ne
 paste in this
 
 ```
-EFSFSID=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/EFSFSID --query Parameters[0].Value)
+EFSFSID=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/EFSFSID --query Parameters[0].Value)
 EFSFSID=`echo $EFSFSID | sed -e 's/^"//' -e 's/"$//'`
 
 ```

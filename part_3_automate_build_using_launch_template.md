@@ -24,11 +24,11 @@ Click `Amazon Linux`
 in the `Amqzon Machine Image` dropdown, locate `Amazon Linux 2 AMI (HVM), SSD Volume TYpe` and set the Architecture to `64-bit (x86)`  
 Under `Instance Type` select whichever instance is free tier eligable from either `t3.micro` and `t2.micro`    
 Under `Key pair (login)` select `Don't include in launch template`  
-Under `networking Settings` `select existing security group` and choose `A4LVPC-SGWordpress`
+Under `networking Settings` `select existing security group` and choose `SPCVPC-SGWordpress`
 Leave storage volumes unchanged  
 Leave Resource Tags Unchanged  
 Expand `Advanced Details`
-Under `IAM instance profile` select `A4LVPC-WordpressInstanceProfile` there will be some random at the end, thats ok!  
+Under `IAM instance profile` select `SPCVPC-WordpressInstanceProfile` there will be some random at the end, thats ok!  
 Under `Credit specification` select `Standard`
 
 # STAGE 2B - Add Userdata

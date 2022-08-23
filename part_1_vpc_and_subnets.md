@@ -5,7 +5,7 @@
 
 # VPC 
 
-Created VPC named: PlanetsVPC
+Created VPC named: SPCVPC
 
 - IP: 10.64.0.0/16
 
@@ -83,9 +83,9 @@ Route tables format:
 
 # Additional Steps 
 
-1. Create 'PlanetsVPC'
+1. Create 'SPCVPC'
 
-   Create Internet gateway `PlanetsIGW`, and attach to `PlanetsVPC`.
+   Create Internet gateway `SPCIGW`, and attach to `SPCVPC`.
 
    Once the VPC has been created, click on ‘Actions’, then:
 

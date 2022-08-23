@@ -16,7 +16,7 @@ Click `Subnet Groups`
 Click `Create DB Subnet Group`  
 Under `Name` enter `WordPressRDSSubNetGroup`  
 Under `Description` enter `RDS Subnet Group for WordPress`  
-Under `VPC` select `A4LVPC`  
+Under `VPC` select `SPCVPC`  
 
 Under `Add subnets` 
 In `Availability Zones` select `us-east-1a` & `us-east-1b` & `us-east-1c`  
@@ -42,18 +42,18 @@ Under `Version` select `MySQL 8.0.28` (best aurora compatability for snapshot mi
 Scroll down and select `Free Tier` under templates
 _this ensures there will be no costs for the database but it will be single AZ only_
 
-under `Db instance identifier` enter `a4lWordPress`
-under `Master Username` enter enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBUser/description?region=us-east-1&tab=Table  
-under `Master Password` and `Confirm Password` enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBPassword/description?region=us-east-1&tab=Table  
+under `Db instance identifier` enter `SPCWordPress`
+under `Master Username` enter enter the value from here https://console.aws.amazon.com/systems-manager/parameters/SPC/Wordpress/DBUser/description?region=us-east-1&tab=Table  
+under `Master Password` and `Confirm Password` enter the value from here https://console.aws.amazon.com/systems-manager/parameters/SPC/Wordpress/DBPassword/description?region=us-east-1&tab=Table  
 
 Under `DB Instance size`, then `DB instance class`, then `Burstable classes (includes t classes)` make sure db.t3.micro or db.t2.micro is selected  
-Scroll down, under `Connectivity`, `Virtual private cloud (VPC)` select `A4LVPC`  
+Scroll down, under `Connectivity`, `Virtual private cloud (VPC)` select `SPCVPC`  
 Ensure under `Subnet group` that `wordpressrdssubnetgroup` is selected  
 Make sure `Public Access` is set to `No`  
-Under `VPC security groups` make sure `choose existing` is selected, remove `default` and add `A4LVPC-SG-Database`  
+Under `VPC security groups` make sure `choose existing` is selected, remove `default` and add `SPCVPC-SG-Database`  
 Under `Availability Zone` set `us-east-1a`  
 Scroll down and expand `Additional configuration`  
-in the `Initial database name` box enter the value from here https://console.aws.amazon.com/systems-manager/parameters/A4L/Wordpress/DBName/description?region=us-east-1&tab=Table  
+in the `Initial database name` box enter the value from here https://console.aws.amazon.com/systems-manager/parameters/SPC/Wordpress/DBName/description?region=us-east-1&tab=Table  
 Scroll to the bottom and click `create Database`  
 
 ** this will take anywhere up to 30 minutes to create ... it will need to be fully ready before you move to the next step - coffee time !!!! **
@@ -73,19 +73,19 @@ You're going to do an export of the SQL database running on the local ec2 instan
 
 First run these commands to populate variables with the data from Parameter store, it avoids having to keep locating passwords  
 ```
-DBPassword=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBPassword --with-decryption --query Parameters[0].Value)
+DBPassword=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/DBPassword --with-decryption --query Parameters[0].Value)
 DBPassword=`echo $DBPassword | sed -e 's/^"//' -e 's/"$//'`
 
-DBRootPassword=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBRootPassword --with-decryption --query Parameters[0].Value)
+DBRootPassword=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/DBRootPassword --with-decryption --query Parameters[0].Value)
 DBRootPassword=`echo $DBRootPassword | sed -e 's/^"//' -e 's/"$//'`
 
-DBUser=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBUser --query Parameters[0].Value)
+DBUser=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/DBUser --query Parameters[0].Value)
 DBUser=`echo $DBUser | sed -e 's/^"//' -e 's/"$//'`
 
-DBName=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBName --query Parameters[0].Value)
+DBName=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/DBName --query Parameters[0].Value)
 DBName=`echo $DBName | sed -e 's/^"//' -e 's/"$//'`
 
-DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBEndpoint --query Parameters[0].Value)
+DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/DBEndpoint --query Parameters[0].Value)
 DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
 
 ```
@@ -95,20 +95,20 @@ DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
 To take a backup of the database run
 
 ```
-mysqldump -h $DBEndpoint -u $DBUser -p$DBPassword $DBName > a4lWordPress.sql
+mysqldump -h $DBEndpoint -u $DBUser -p$DBPassword $DBName > spcWordPress.sql
 ```
 ** in production you wouldnt put the password in the CLI like this, its a security risk since a ps -aux can see it .. but security isnt the focus of this demo its the process of rearchitecting **
 
 ## Restore that Backup into RDS
 
 Move to the RDS Console https://console.aws.amazon.com/rds/home?region=us-east-1#databases:  
-Click the `a4lWordPressdb` instance  
+Click the `spcWordPressdb` instance  
 Copy the `endpoint` into your clipboard  
 Move to the Parameter store https://console.aws.amazon.com/systems-manager/parameters?region=us-east-1  
-Check the box next to `/A4L/Wordpress/DBEndpoint` and click `Delete` (please do delete this, not just edit the existing one)  
+Check the box next to `/SPC/Wordpress/DBEndpoint` and click `Delete` (please do delete this, not just edit the existing one)  
 Click `Create Parameter`  
 
-Under `Name` enter `/A4L/Wordpress/DBEndpoint`  
+Under `Name` enter `/SPC/Wordpress/DBEndpoint`  
 Under `Descripton` enter `WordPress Endpoint Name`  
 Under `Tier` select `Standard`    
 Under `Type` select `String`  
@@ -119,14 +119,14 @@ Click `Create Parameter`
 Update the DbEndpoint environment variable with 
 
 ```
-DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/DBEndpoint --query Parameters[0].Value)
+DBEndpoint=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/DBEndpoint --query Parameters[0].Value)
 DBEndpoint=`echo $DBEndpoint | sed -e 's/^"//' -e 's/"$//'`
 ```
 
 Restore the database export into RDS using
 
 ```
-mysql -h $DBEndpoint -u $DBUser -p$DBPassword $DBName < a4lWordPress.sql 
+mysql -h $DBEndpoint -u $DBUser -p$DBPassword $DBName < spcWordPress.sql 
 ```
 
 ## Change the WordPress config file to use RDS

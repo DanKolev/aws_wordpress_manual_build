@@ -13,24 +13,24 @@ Move to the EC2 console
 Click `Load Balancers` under `Load Balancing`  
 Click `Create Load Balancer`  
 Click `Create` under `Application Load Balancer`  
-Under name enter `A4LWORDPRESSALB`  
+Under name enter `SPCWORDPRESSALB`  
 Ensure `internet-facing` is selected  
 ensure `ipv4` selected for `IP Address type`  
 
-Under `Network Mapping` select `A4LVPC` in the `VPC Dropdown`  
+Under `Network Mapping` select `SPCVPC` in the `VPC Dropdown`  
 Check the boxes next to `us-east-1a` `us-east-1b` and `us-east-1c`  
 Select `sn-pub-A`, `sn-pub-B` and `sn-pub-C` for each.  
 
-Scroll down and under `Security Groups` remove `default` and select the `A4LVPC-SGLoadBalancer` from the dropdown.  
+Scroll down and under `Security Groups` remove `default` and select the `SPCVPC-SGLoadBalancer` from the dropdown.  
 
 Under `Listener and Routing` 
 Ensure `Protocol` is set to `HTTP` and `Port` is set to `80`.  
 Click `Create target group` which will open a new tab  
 for `Target Type` choose `Instance` 
-for Name choose `A4LWORDPRESSALBTG`  
+for Name choose `SPCWORDPRESSALBTG`  
 For `Protocol` choose `HTTP`  
 For `Port` choose `80`  
-Make sure the `VPC` is set to `A4LVPC`  
+Make sure the `VPC` is set to `SPCVPC`  
 Check that `Protocol Version` is set to `HTTP1`  
 
 Under `Health checks`
@@ -39,7 +39,7 @@ and for `Path` choose `/`
 Click `Next`  
 We wont register any right now so click `Create target Group`  
 Go back to the previous tab where you are creating the Load Balancer
-Click the `Refresh Icon` and select the `A4LWORDPRESSALBTG` item in the dropdown.  
+Click the `Refresh Icon` and select the `SPCWORDPRESSALBTG` item in the dropdown.  
 Scroll down to the bottom and click `Create load balancer`  
 Click `View Load Balancer` and select the load balancer you are creating.  
 Scroll down and copy the `DNS Name` into your clipboard  
@@ -49,7 +49,7 @@ Scroll down and copy the `DNS Name` into your clipboard
 Move to the systems manager console https://console.aws.amazon.com/systems-manager/home?region=us-east-1#  
 Click `Parameter Store`  
 Click `Create Parameter`  
-Under `Name` enter `/A4L/Wordpress/ALBDNSNAME` 
+Under `Name` enter `/SPC/Wordpress/ALBDNSNAME` 
 Under `Description` enter `DNS Name of the Application Load Balancer for wordpress`  
 for `Tier` set `Standard`  
 For `Type` set `String`  
@@ -62,7 +62,7 @@ Click `Create Parameter`
 Go to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:  
 CLick `Launch Templates`  
 Check the box next to the `Wordpress` launch template, click `Actions` and click `Modify Template (Create New Version)`  
-for `Template version description` enter `App only, uses EFS filesystem defined in /A4L/Wordpress/EFSFSID, ALB home added to WP Database`  
+for `Template version description` enter `App only, uses EFS filesystem defined in /SPC/Wordpress/EFSFSID, ALB home added to WP Database`  
 Scroll to the bottom and expand `Advanced Details`  
 Scroll to the bottom and find `User Data` expand the entry box as much as possible.  
 
@@ -70,7 +70,7 @@ After `#!/bin/bash -xe` position cursor at the end & press enter twice to add ne
 paste in this
 
 ```
-ALBDNSNAME=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/ALBDNSNAME --query Parameters[0].Value)
+ALBDNSNAME=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/ALBDNSNAME --query Parameters[0].Value)
 ALBDNSNAME=`echo $ALBDNSNAME | sed -e 's/^"//' -e 's/"$//'`
 
 ```
@@ -84,7 +84,7 @@ source <(php -r 'require("/var/www/html/wp-config.php"); echo("DB_NAME=".DB_NAME
 SQL_COMMAND="mysql -u $DB_USER -h $DB_HOST -p$DB_PASSWORD $DB_NAME -e"
 OLD_URL=$(mysql -u $DB_USER -h $DB_HOST -p$DB_PASSWORD $DB_NAME -e 'select option_value from wp_options where option_id = 1;' | grep http)
 
-ALBDNSNAME=$(aws ssm get-parameters --region us-east-1 --names /A4L/Wordpress/ALBDNSNAME --query Parameters[0].Value)
+ALBDNSNAME=$(aws ssm get-parameters --region us-east-1 --names /SPC/Wordpress/ALBDNSNAME --query Parameters[0].Value)
 ALBDNSNAME=`echo $ALBDNSNAME | sed -e 's/^"//' -e 's/"$//'`
 
 $SQL_COMMAND "UPDATE wp_options SET option_value = replace(option_value, '$OLD_URL', 'http://$ALBDNSNAME') WHERE option_name = 'home' OR option_name = 'siteurl';"
@@ -112,11 +112,11 @@ Move to the EC2 console
 under `Auto Scaling`  
 click `Auto Scaling Groups`  
 Click `Create an Auto Scaling Group`  
-For `Auto Scaling group name` enter `A4LWORDPRESSASG`  
+For `Auto Scaling group name` enter `SPCWORDPRESSASG`  
 Under `Launch Template` select `Wordpress`  
 Under `Version` select `Latest`  
 Scroll down and click `Next`  
-For `Network` `VPC` select `A4LVPC`  
+For `Network` `VPC` select `SPCVPC`  
 For `Subnets` select `sn-Pub-A`, `sn-pub-B` and `sn-pub-C`  
 Click `next`  
 
@@ -126,7 +126,7 @@ Its here where we integrate the ASG with the Load Balancer. Load balancers actua
 
 Check the `Attach to an existing Load balancer` box  
 Ensure `Choose from your load balancer target groups` is selected.  
-for `existing load balancer targer groups` select `A4LWORDPRESSALBTG`  
+for `existing load balancer targer groups` select `SPCWORDPRESSALBTG`  
 Under `health Checks - Optional` choose `ELB`  
 check `enable group metris collection within CloudWatch`  
 
@@ -153,7 +153,7 @@ Click `Refresh` and you should see a new instance being created... `Wordpress-AS
 
 Move to the AWS Console https://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-1#AutoScalingGroups:  
 Click `Auto Scaling Groups`  
-Click the `A4LWORDPRESSASG` ASG  
+Click the `SPCWORDPRESSASG` ASG  
 Click the `Automatic SCaling` Tab  
 
 We're going to add two policies, scale in and scale out.
@@ -167,7 +167,7 @@ Click `Create a CloudWatch Alarm`
 Click `Select Metric`  
 Click `EC2`  
 Click `By Auto Scaling Group`
-Check `A4LWORDPRESSASG CPU Utilization`  
+Check `SPCWORDPRESSASG CPU Utilization`  
 Click `Select Metric`  
 Scroll Down... select `Threashhold style` `static`, select `Greater` and enter `40` in the `than` box and click `Next`
 Click `Remove` next to notification if you see anything listed here
@@ -190,7 +190,7 @@ Click `Create a CloudWatch Alarm`
 Click `Select Metric`  
 Click `EC2`  
 Click `By Auto Scaling Group`
-Check `A4LWORDPRESSASG CPU Utilization`  
+Check `SPCWORDPRESSASG CPU Utilization`  
 Click `Select Metric`  
 Scroll Down... select `Static`, `Lower` and enter `40` in the `than` box and click `next`
 Click `Remove` next to notification
