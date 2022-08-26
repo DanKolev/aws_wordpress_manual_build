@@ -7,7 +7,7 @@
 
 Created VPC named: SPCVPC
 
-- IP: 10.64.0.0/16
+- IP: 10.64.0.0/24
 
 - No. of subnets:   16
 
