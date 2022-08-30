@@ -37,7 +37,7 @@ Spare capacity range for future use
 
 Subnet format: 
 
-- db – app – pub
+- db – app – web(public)
 
 Name and CIDR for availability zones
 
@@ -73,13 +73,13 @@ Name and CIDR for availability zones
 IPv6 custom value
 
 - Every VPC can be allocated with  /56 IPv6 CIDR. Every subnet within that VPC can optionally be allocated with /64 IPv6 CIDR. There are 256 /64 ranges within /56 
-IPv6 CIDR. A hexadecimal value ranging from 00 to FF provides 256 /64possible values.
+IPv6 CIDR. A hexadecimal value ranging from 00 to FF provides 256 /64 possible values.
 
 # Routing tables
 
 Route tables format:
 
- - PLNTS-VPC-RT-PUB`
+ - `SPC-RT-PUB`
 
 # Additional Steps 
 
