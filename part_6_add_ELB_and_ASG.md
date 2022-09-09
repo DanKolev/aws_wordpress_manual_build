@@ -2,12 +2,12 @@
 
 ![Add_ELB_ASG](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/data/diagrams/6.add_ELB_and_ASG.png)
 
-In stage 5 of this advanced demo lesson, you will be adding an auto scaling group to provision and terminate instances automatically based on load on the system.  
+In Part 6 we will be adding an auto scaling group to provision and terminate instances automatically based on load on the system.  
 
-You have already performed all of the preparation steps required, by moving data storage onto RDS, media storage onto EFS and creating a launch template to automatically build the wordpress application servers.
+We have already performed all of the preparation steps required, by moving data storage onto RDS, media storage onto EFS and creating a launch template to automatically build the wordpress application servers.
 
 
-# STAGE 5A - Create the load balancer
+# STAGE 6A - Create the load balancer
 
 Move to the EC2 console  
 Click `Load Balancers` under `Load Balancing`  
@@ -44,7 +44,7 @@ Scroll down to the bottom and click `Create load balancer`
 Click `View Load Balancer` and select the load balancer you are creating.  
 Scroll down and copy the `DNS Name` into your clipboard  
 
-# STAGE 5B - Create a new Parameter store value with the ELB DNS name
+# STAGE 6B - Create a new Parameter store value with the ELB DNS name
 
 Move to the systems manager console https://console.aws.amazon.com/systems-manager/home?region=us-east-1#  
 Click `Parameter Store`  
@@ -57,7 +57,7 @@ for `Data Type` set `text`
 for `Value` set the DNS name of the load balancer you copied into your clipboard
 Click `Create Parameter` 
 
-# STAGE 5C - Update the Launch template to wordpress is updated with the ELB DNS as its home
+# STAGE 6C - Update the Launch template to wordpress is updated with the ELB DNS as its home
 
 Go to the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:  
 CLick `Launch Templates`  
@@ -106,7 +106,7 @@ Under `Template version` select `4`
 Click `Set as default version`  
 
 
-# STAGE 5D - Create an auto scaling group (no scaling yet)
+# STAGE 6D - Create an auto scaling group (no scaling yet)
 
 Move to the EC2 console  
 under `Auto Scaling`  
@@ -120,7 +120,7 @@ For `Network` `VPC` select `SPCVPC`
 For `Subnets` select `sn-Pub-A`, `sn-pub-B` and `sn-pub-C`  
 Click `next`  
 
-# STAGE 5E - Integrate ASG and ALB
+# STAGE 6E - Integrate ASG and ALB
 
 Its here where we integrate the ASG with the Load Balancer. Load balancers actually work (for EC2) with static instance registrations. What ASG does, it link with a target group, any instances provisioned by the ASG are added to the target group, anything terminated is removed.  
 
@@ -149,7 +149,7 @@ This removes the old manually created wordpress instance
 Click `Refresh` and you should see a new instance being created... `Wordpress-ASG` this is the one created automatically by the ASG using the launch template - this is because the desired capacity is set to `1` and we currently have `0`  
 
 
-# STAGE 5F - Add scaling
+# STAGE 6F - Add scaling
 
 Move to the AWS Console https://console.aws.amazon.com/ec2/autoscaling/home?region=us-east-1#AutoScalingGroups:  
 Click `Auto Scaling Groups`  
@@ -210,7 +210,7 @@ Click `Edit`
 Set `Desired 1`, Minimum `1` and Maximum `3`  
 Click `Update`  
 
-# STAGE 5G - Test Scaling & Self Healing
+# STAGE 6G - Test Scaling & Self Healing
 
 Open Auto Scaling Groups in a new tab https://console.aws.amazon.com/ec2autoscaling/home?region=us-east-1#/details  
 Open that Auto scaling group in that tab and click on `Activity` tab
@@ -234,7 +234,7 @@ Try terminating one of the EC2 instances ...
 Watch what happens in the activity tab of the auto scaling group console.
 This is an example of self-healing, a new instance is provisioned to take the old ones place.
 
-# STAGE 5 - FINISH  
+# STAGE 6 - FINISH  
 
 This configuration has several limitations :-
 
@@ -247,7 +247,7 @@ This configuration has several limitations :-
 - ~~The IP of the instance is hardcoded into the database ....~~ FIXED
 
 
-You can now optionally move onto STAGE6
+
 
 
 

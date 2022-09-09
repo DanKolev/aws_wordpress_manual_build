@@ -2,9 +2,9 @@
 
 ![Add_EFS](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/data/diagrams/5.add_efs_and_update_LT.png)
 
-Welcome back, in stage 4 of this demo series you will be creating an EFS file system designed to store the wordpress locally stored media. This area stores any media for posts uploaded when creating the post as well as theme data.  By storing this on a shared file system it means that the data can be used across all instances in a consistent way, and it lives on past the lifetime of the instance.  
+We are creating an EFS file system designed to store the wordpress locally stored media. This area stores any media for posts uploaded when creating the post as well as theme data.  By storing this on a shared file system it means that the data can be used across all instances in a consistent way, and it lives on past the lifetime of the instance.  
 
-# STAGE 4A - Create EFS File System
+# STAGE 5A - Create EFS File System
 
 ## File System Settings
 
@@ -41,7 +41,7 @@ Scroll down and all the mount points will show as `creating` keep hitting refres
 Note down the `fs-XXXXXXXX` file system ID once visible at the top of this screen, you will need it in the next step.  
 
 
-# STAGE 4B - Add an fsid to parameter store
+# STAGE 5B - Add an fsid to parameter store
 
 Now that the file system has been created, you need to add another parameter store value for the file system ID so that the automatically built instance(s) can load this safely.
 
@@ -57,7 +57,7 @@ for `Value` set the file system ID `fs-XXXXXXX` which you just noted down (use y
 Click `Create Parameter`  
 
 
-# STAGE 4C - Connect the file system to the EC2 instance & copy data
+# STAGE 5C - Connect the file system to the EC2 instance & copy data
 
 Open the EC2 console and go to running instances https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name  
 Select the `Wordpress-LT` instance, right click, `Connect`, Select `Session Manager` and click `Connect`  
@@ -103,7 +103,7 @@ chown -R ec2-user:apache /var/www/
 
 ```
 
-# STAGE 4D - Test that the wordpress app can load the media
+# STAGE 5D - Test that the wordpress app can load the media
 
 run the following command to reboot the EC2 wordpress instance
 ```
@@ -112,7 +112,7 @@ reboot
 
 Once it restarts, ensure that you can still load the wordpress blog which is now loading the media from EFS.  
 
-# STAGE 4E - Update the launch template with the config to automate the EFS part
+# STAGE 5E - Update the launch template with the config to automate the EFS part
 
 Next you will update the launch template so that it automatically mounts the EFS file system during its provisioning process. This means that in the next stage, when you add autoscaling, all instances will have access to the same media store ...allowing the platform to scale.
 
@@ -156,7 +156,7 @@ Click `Set as default version`
 
 
 
-# STAGE 4 - FINISH  
+# STAGE 5 - FINISH  
 
 This configuration has several limitations :-
 
@@ -170,4 +170,4 @@ This configuration has several limitations :-
 - The IP of the instance is hardcoded into the database ....
 
 
-You can now move onto STAGE 5
+

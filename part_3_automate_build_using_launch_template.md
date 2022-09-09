@@ -2,15 +2,15 @@
 
 ![Automate_LT](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/data/diagrams/3.automate_built_using_launch_template.png)
 
-In stage 2 of this advanced demo lesson you are going to create a launch template which can automate the build of WordPress.  
+In part 3 of this advanced demo lesson you are going to create a launch template which can automate the build of WordPress.  
 The architecture will still use the single instance for both the WordPress application and database, the only change will be an automatic build rather than manual.  
 Any level of automation/self-healing or scaling architecture will need a bootstrapped or AMI-baked build to function effectively.
 
-# STAGE 1 TIDYUP
+# TIDYUP
 
 Right click on the manual instance you created in the previous step called `Wordpress-Manual` and select `Terminate Instance` and confirm that termination.  
 
-# STAGE 2A - Create the Launch Template
+# STAGE 3A - Create the Launch Template
 
 Open the EC2 console   
 Click `Launch Templates` under `Instances` on the left menu  
@@ -31,7 +31,7 @@ Expand `Advanced Details`
 Under `IAM instance profile` select `SPCVPC-WordpressInstanceProfile` there will be some random at the end, thats ok!  
 Under `Credit specification` select `Standard`
 
-# STAGE 2B - Add Userdata
+# STAGE 3B - Add Userdata
 
 At this point we need to add the configuration which will build the instance
 Enter the user data below into the `User Data` box
@@ -103,7 +103,7 @@ Click `Create Launch Template`
 Click  `Launch Templates` towards the top of the screen
 
 
-# STAGE 2C - Launch an instance using it
+# STAGE 3C - Launch an instance using it
 
 Select the launch template in the list ... it should be called `Wordpress`  
 Click `Actions` and `Launch instance from template`
@@ -114,7 +114,7 @@ Set `Key` to `Name` and `Value` to `Wordpress-LT`
 Scroll to the bottom and click `Launch Instance`  
 Click the instance id in the `Success` box
 
-# STAGE 2D - Test
+# STAGE 3D - Test
 
 Open the EC2 console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name  
 Select the `Wordpress-LT` instance  
@@ -153,7 +153,7 @@ Click `view Post`
 This is your working, auto built WordPress instance
 ** don't terminate the instance this time - we're going to migrate the database in stage 3**
 
-# STAGE 2 - FINISH  
+# STAGE 3 - FINISH  
 
 This configuration has several limitations :-
 
@@ -167,4 +167,3 @@ This configuration has several limitations :-
 - The IP of the instance is hardcoded into the database ....
 
 
-You can now move onto STAGE3

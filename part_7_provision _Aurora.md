@@ -4,7 +4,7 @@
 
 In stage 6 of this advanced demo lesson, you can optionally move to a 3AZ aurora cluster to provide high levels of resilience for the wordpress application. This is entirely optional and will **NOT** be covered under the free tier.
 
-# STAGE 6A - SNAPSHOT THE RDS INSTANCE
+# STAGE 7A - SNAPSHOT THE RDS INSTANCE
 
 Move to the RDS Console, and databases :  
 select the `spcwordpress` RDS instance  
@@ -14,7 +14,7 @@ Click `Take Snapshot`
 
 Wait for the status of the snapshot to change from `creating` to `available`, this might take a few minutes  
 
-# STAGE 6B - PROVISION AURORA
+# STAGE 7B - PROVISION AURORA
 
 Select the snapshot you just created by clicking the checkbox.  
 Click `Actions` and then `Migrate Snapshot`  
@@ -32,7 +32,7 @@ CLick `Migrate`
 
 This will take some time to complete ... the cluster and reader will need to both show as `Available` before you continue.
 
-# STAGE 6C - CREATE ADDITIONAL READERS
+# STAGE 7C - CREATE ADDITIONAL READERS
 
 To improve the resiliency of the solution we can create additional replicas. To do that select the `spcwordpress-aurora-cluster` Aurora cluster  
 Click `Actions` and then click `Add Reader`  
@@ -52,7 +52,7 @@ Leave everything else as default, scroll down and click `Add Reader`
 
 At this point you have a full 3AZ resilient database cluster  
 
-# STAGE 6D - RECREATE THE PARAMETER for DBENDPOINT
+# STAGE 7D - RECREATE THE PARAMETER for DBENDPOINT
 
 To change the application to use this click the `spcwordpress-aurora-cluster` Aurora Cluster  
 Scroll down and locate the `Endpoints` section, and copy down the `endpoint name` for the `Writer` Endpoint inyour your clipboard  
@@ -68,7 +68,7 @@ Under `Data Type` select `text`
 Under `Value` enter the Aurora endpoint endpoint you just copied  
 Click `Create Parameter`   
 
-# STAGE 6E - REFRESH THE ASG
+# STAGE 7E - REFRESH THE ASG
 
 move to the auto scaling group
 click `start instance refresh`
@@ -79,6 +79,6 @@ test it by opening new instance
 
 This is a good way to do a rolling refresh of instances in an ASG.  
 
-# STAGE 6 - FINISH  
+# STAGE 7 - FINISH  
 
 This is the end of the architecture evolution, 

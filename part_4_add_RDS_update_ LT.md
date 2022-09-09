@@ -2,10 +2,10 @@
 
 ![Add_RDS](https://github.com/DanKolev/aws_wordpress_manual_build/blob/main/data/diagrams/4.add_rds_and_update_launch_template.png)
 
-In stage 3 you will be splitting out the database functionality from the EC2 instance .. running MariaDB to an RDS instance running the MySQL Engine.  
+In part 4 we are splitting out the database functionality from the EC2 instance .. running MariaDB to an RDS instance running the MySQL Engine.  
 This will allow the DB and Instance to scale independently, and will allow the data to be secure past the lifetime of the EC2 instance.  
 
-# STAGE 3A - Create RDS Subnet Group
+# STAGE 4A - Create RDS Subnet Group
 
 A subnet group is what allows RDS to select from a range of subnets to put its databases inside  
 In this case you will give it a selection of 3 subnets sn-db-A / B and C  
@@ -22,13 +22,13 @@ Under `Add subnets`
 In `Availability Zones` select `us-east-1a` & `us-east-1b` & `us-east-1c`  
 Under `Subnets` check the box next to 
 
-- 10.16.16.0/20 (this is sn-db-A)
-- 10.16.80.0/20 (this is sn-db-B)
-- 10.16.144.0/20 (this is sn-db-C)
+- 10.64.0.16/28 (this is sn-db-A)
+- 10.64.0.64/28 (this is sn-db-B)
+- 10.64.0.112/28 (this is sn-db-C)
 
 Click `Create`  
 
-# STAGE 3B - Create RDS Instance
+# STAGE 4B - Create RDS Instance
 
 In this sub stage of the demo, you are going to provision an RDS instance using the subnet group to control placement within the VPC.   
 Normally you would use multi-az for production, to keep costs low, for now you should use a single AZ as per the instructions below.  
@@ -58,7 +58,7 @@ Scroll to the bottom and click `create Database`
 
 ** this will take anywhere up to 30 minutes to create ... it will need to be fully ready before you move to the next step - coffee time !!!! **
 
-# STAGE 3C - Migrate WordPress data from MariaDB to RDS
+# STAGE 4C - Migrate WordPress data from MariaDB to RDS
 
 Open the EC2 Console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:  
 Click `Instances`  
@@ -138,7 +138,7 @@ sudo sed -i "s/'localhost'/'$DBEndpoint'/g" /var/www/html/wp-config.php
 ```
 
 
-# STAGE 3D - Stop the MariaDB Service
+# STAGE 4D - Stop the MariaDB Service
 
 ```
 sudo systemctl disable mariadb
@@ -146,7 +146,7 @@ sudo systemctl stop mariadb
 ```
 
 
-# STAGE 3E - Test WordPress
+# STAGE 4E - Test WordPress
 
 Move to the EC2 Console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=desc:tag:Name  
 Select the `WordPress-LT` Instance  
@@ -155,7 +155,7 @@ Open the IP in a new tab
 You should see the blog, working, even though MariaDB on the EC2 instance is stopped and disabled
 Its now running using RDS  
 
-# STAGE 3F - Update the LT so it doesnt install 
+# STAGE 4F - Update the LT so it doesnt install 
 
 Move to the EC2 Console https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:  
 Under `Instances` click `Launch Templates`  
@@ -192,7 +192,7 @@ Click `Actions` and select `Set Default Version`
 Under `Template version` select `2`  
 Click `Set as default version`  
 
-# STAGE 3 - FINISH  
+# STAGE 4 - FINISH  
 
 This configuration has several limitations :-
 
@@ -206,6 +206,6 @@ This configuration has several limitations :-
 - The IP of the instance is hardcoded into the database ....
 
 
-You can now move onto STAGE 4
+
 
 

@@ -287,25 +287,9 @@ Perform Initial Configuration and make a post
 
  - Click `View Post`
 
-This is your working, manually installed and configured wordpress.
+This is a working, manually installed and configured wordpress.
 
-This configuration has several limitations which you will be resolved one by one :-
 
-    The application and database are built manually, taking time and not allowing automation
-    ^^ it was slow and annoying ... that was the intention.
-    The database and application are on the same instance, neither can scale without the other
-    The database of the application is on an instance, scaling IN/OUT risks this media
-    The application media and UI store is local to an instance, scaling IN/OUT risks this media
-    Customer Connections are to an instance directly ... no health checks/auto healing
-    The IP of the instance is hardcoded into the database ....
-    
-    Right click Wordpress-Manual , Instance State, Stop, Yes, Stop
-    Right click Wordpress-Manual , Instance State, Start, Yes, Start
-    the IP address has changed ... which is bad
-    Try browsing to it ...
-    What about the images....?
-    The images are pointing at the old IP address...
-    Right click Wordpress-Manual , Instance State, Terminate, Yes, Terminate
 
 
 
