@@ -12,7 +12,7 @@ designed to store the wordpress locally stored media. This area stores any media
 By storing this on a shared file system it means that the data can be used across all instances in a consistent way, and it lives on past the lifetime 
 of the instance.
 
-Customer Connections are to an instance directly. There are no health checks, nor auto healing. The IP of the instance is hardcoded into the database.
+Customer are getting connected to an instance directly. There are no health checks, nor auto healing. The IP of the instance is hardcoded into the database.
 This is fixed in part 6, by adding an auto scaling group to provision and terminate instances automatically based on load on the system. Which also enabled us
 to create a new Paramater store value the elastic balancer's DNS name.
 
