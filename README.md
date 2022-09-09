@@ -1,4 +1,4 @@
-# aws_wordpress_manual_build
+# Overview
 
 This project outlines building a fully automated, three-tier (db,app,public) environment. At the beginning, the application and database are built manually, 
 taking time and not allowing automation. This process is automated in part 3 by using a lauch template.
