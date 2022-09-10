@@ -1,7 +1,6 @@
 # Overview
 
-This project outlines the build of a fully elastic and hilghly available, three-tier application stack. At the beginning, the application and database are built manually, 
-taking time and not allowing automation. This process is automated in part 3 by using a lauch template.
+This project outlines the build of a fully elastically scalable and hilghly available, three-tier application stack. At the beginning, the application and database are built manually, taking time and not allowing automation. This process is automated in part 3 by using a launch template.
 
 The database and application are on the same instance, neither can scale without the other. The database of the application is on an instance, 
 scaling IN/OUT risks this media. By splitting out the database functionality from the EC2 instance, and running MariaDB to an RDS instance running 
