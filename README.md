@@ -1,6 +1,6 @@
 # Overview
 
-This project outlines the build of a fully automated, three-tier (db,app,public) application stack. At the beginning, the application and database are built manually, 
+This project outlines the build of a fully elastic and hilghly available, three-tier application stack. At the beginning, the application and database are built manually, 
 taking time and not allowing automation. This process is automated in part 3 by using a lauch template.
 
 The database and application are on the same instance, neither can scale without the other. The database of the application is on an instance, 
