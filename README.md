@@ -1,6 +1,8 @@
 # Overview
 
-At the beginning, the application and database are built manually, taking time and not allowing automation. This process is automated in part 3 by using a launch template.
+This is a simple Wordpress website build, which displays pictures of planets that I find interesting. The challenges and solutions that I have come up with are listed bellow.
+
+At the beginning, the application and database are built manually, which takes time and does not allow automation. This process is automated in part 3 by using a launch template.
 
 The database and application are on the same instance, neither can scale without the other. The database of the application is on an instance, 
 scaling IN/OUT risks this media. By splitting out the database functionality from the EC2 instance, and running MariaDB to an RDS instance running MySQL Engine will allow the DB and Instance to scale independently, and will allow the data to be secure past the lifetime of the EC2 instance. 

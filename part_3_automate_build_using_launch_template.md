@@ -124,7 +124,7 @@ You should see the WordPress welcome page
 
 ## Perform Initial COnfiguration and make a post
 
-in `Site Title` enter `Catagram`  
+in `Site Title` enter `Planetarium`  
 in `Username` enter `admin`
 in `Password` it should suggest a strong password for the wordpress admin user, feel free to use this or choose your own - regardless, write it down somewhere safe. 
 in `Your Email` enter your email address  
@@ -141,10 +141,10 @@ Click `Apply`
 
 Click `Add New`  
 If you see any popups close them down  
-For title `The Best Animal(s)!`  
+For title `Awesome Planets!`  
 Click the `+` under the title, select  `Gallery` 
 Click `Upload`  
-Select some animal pictures.... if you don't have any use google images to download some  
+Select some planets pictures.... if you don't have any use google images to download some  
 Upload them  
 Click `Publish`  
 Click `Publish`
